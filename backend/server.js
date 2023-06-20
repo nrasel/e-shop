@@ -1,16 +1,16 @@
 const app = require("./app");
 const connectDatabase = require("./db/Database");
 
-//handlin uncaught exception
+// Handling uncaught Exception
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`);
-  console.log(`shutting down the server from uncaught exception`);
+  console.log(`shutting down the server for handling uncaught exception`);
 });
 
 // config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
-    path: "backend/config/.env",
+    path: "config/.env",
   });
 }
 app.get("/", (req, res) => {
@@ -20,15 +20,15 @@ app.get("/", (req, res) => {
 // connect db
 connectDatabase();
 
-//create server
+// create server
 const server = app.listen(process.env.PORT, () => {
-  console.log(`server is running on http://localhost:${process.env.PORT}`);
+  console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });
 
-// unhandle promise rejection
+// unhandled promise rejection
 process.on("unhandledRejection", (err) => {
-  console.log(`shutting down the server fjor ${err.message}`);
-  console.log(`shutting down the server for unhnadle promise rejection`);
+  console.log(`Shutting down the server for ${err.message}`);
+  console.log(`shutting down the server for unhandle promise rejection`);
 
   server.close(() => {
     process.exit(1);
