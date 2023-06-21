@@ -1,6 +1,5 @@
 # dependencies
 backend/config/.env
-frontend/node_modules/
 /node_modules
 # socket/node_modules
 
