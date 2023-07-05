@@ -14,7 +14,7 @@ const { isSellerAuthenticated } = require("../middleware/auth");
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
-    console.log(email);
+    // console.log(email);
     const sellerEmail = await shopModel.findOne({ email });
     if (sellerEmail) {
       const filename = req.file.filename;
@@ -29,7 +29,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     }
 
     const filename = req.file.filename;
-    console.log(filename);
+    // console.log(filename);
     const fileUrl = path.join(filename);
 
     const seller = {
@@ -95,7 +95,6 @@ router.post(
       if (seller) {
         return next(new ErrorHandler("Seller already exists", 400));
       }
-      console.log(name, email, avatar, password, zipCode, address, phoneNumber);
       seller = await shopModel.create({
         name,
         email,
@@ -156,6 +155,25 @@ router.get(
       res.status(200).json({
         success: true,
         seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// shop logout
+router.get(
+  "/shop-logout",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      res.cookie("seller_token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+      res.status(201).json({
+        success: true,
+        message: "Log out successful!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
