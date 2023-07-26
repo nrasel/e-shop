@@ -89,4 +89,19 @@ router.delete(
   })
 );
 
+router.get(
+  "/get-all-products",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const products = await productModel.find().sort({ createdAt: -1 });
+      res.status(201).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      return next(new (ErrorHandler(error, 400))());
+    }
+  })
+);
+
 module.exports = router;

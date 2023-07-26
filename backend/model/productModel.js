@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "PLease enter your product description!"],
+    required: [true, "Please enter your product description!"],
   },
   category: {
     type: String,
@@ -15,7 +15,6 @@ const productSchema = new mongoose.Schema({
   },
   tags: {
     type: String,
-    required: [true, "Please enter your product tags!"],
   },
   originalPrice: {
     type: Number,
@@ -33,6 +32,29 @@ const productSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  reviews: [
+    {
+      user: {
+        type: Object,
+      },
+      rating: {
+        type: Number,
+      },
+      comment: {
+        type: String,
+      },
+      productId: {
+        type: String,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
+    },
+  ],
+  ratings: {
+    type: Number,
+  },
   shopId: {
     type: String,
     required: true,
