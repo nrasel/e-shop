@@ -43,6 +43,7 @@ router.post(
 router.get("/get-all-events", async (req, res, next) => {
   try {
     const events = await eventModel.find();
+
     res.status(201).json({
       success: true,
       events,
