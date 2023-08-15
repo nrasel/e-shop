@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema({
       type: String,
     },
   },
-  padiAt: {
+  paidAt: {
     type: Date,
     default: Date.now(),
   },
