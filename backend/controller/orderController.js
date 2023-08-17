@@ -42,4 +42,47 @@ router.post(
     }
   })
 );
+
+// get all orders of user
+router.get(
+  "/get-all-orders/:userId",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const orders = await orderModel
+        .find({ "user._id": req.params.userId })
+        .sort({
+          createdAt: -1,
+        });
+
+      res.status(200).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// get all order of sellet
+router.get(
+  "/get-seller-all-orders/:shopId",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const orders = await await orderModel
+        .find({ "cart.shopId": req.params.shopId })
+        .sort({
+          createdAt: -1,
+        });
+
+      res.status(200).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
 module.exports = router;
