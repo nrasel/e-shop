@@ -33,9 +33,11 @@ const coupon = require("./controller/coupounCodeController");
 const payment = require("./controller/paymentController");
 const order = require("./controller/orderController");
 const conversation = require("./controller/conversation");
+const message = require("./controller/messageController");
 
 app.use("/api/v2/user", user);
 app.use("/api/v2/conversation", conversation);
+app.use("/api/v2/message", message);
 app.use("/api/v2/order", order);
 app.use("/api/v2/shop", shop);
 app.use("/api/v2/product", product);
