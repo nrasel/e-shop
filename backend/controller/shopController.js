@@ -9,7 +9,11 @@ const { upload } = require("../multer");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
-const { isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAuthenticated,
+  isAdmin,
+} = require("../middleware/auth");
 
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
@@ -247,6 +251,26 @@ router.put(
       res.status(201).json({
         success: true,
         shop,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// all sellers --- for admin
+router.get(
+  "/admin-all-sellers",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const sellers = await shopModel.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        sellers,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
