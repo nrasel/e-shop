@@ -8,6 +8,7 @@ const shopModel = require("../model/shopModel");
 const {
   isSellerAuthenticated,
   isAuthenticated,
+  isAdmin,
 } = require("../middleware/auth");
 const orderModel = require("../model/orderModel");
 
@@ -161,6 +162,26 @@ router.put(
       });
     } catch (error) {
       return next(new (ErrorHandler(error, 400))());
+    }
+  })
+);
+
+// all sellers --- for admin
+router.get(
+  "/admin-all-products",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const products = await productModel.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        products,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

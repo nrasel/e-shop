@@ -5,7 +5,11 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const router = express.Router();
 const eventModel = require("../model/eventModel");
 const shopModel = require("../model/shopModel");
-const { isSellerAuthenticated } = require("../middleware/auth");
+const {
+  isSellerAuthenticated,
+  isAdmin,
+  isAuthenticated,
+} = require("../middleware/auth");
 const fs = require("fs");
 
 // create event
@@ -101,6 +105,26 @@ router.delete(
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+// all events --- for admin
+router.get(
+  "/admin-all-events",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const events = await eventModel.find().sort({
+        createdAt: -1,
+      });
+      res.status(201).json({
+        success: true,
+        events,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
