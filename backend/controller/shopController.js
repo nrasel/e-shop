@@ -305,6 +305,26 @@ router.delete(
   })
 );
 
+//update seller withdraw methods ---- only for seller
+router.put(
+  "update-payment-method",
+  isSellerAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { widthrawMethod } = req.body;
+      const seller = await shopModel.findByIdAndUpdate(req.seller._id, {
+        widthrawMethod,
+      });
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 module.exports = router;
 
 // 56:55 minute start
