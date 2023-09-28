@@ -4,6 +4,7 @@ const express = require("express");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { isSellerAuthenticated } = require("../middleware/auth");
 const withdrawModel = require("../model/withdrawModel");
+const router = express.Router();
 
 // create with request --- only for seller
 router.post(

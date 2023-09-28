@@ -307,14 +307,17 @@ router.delete(
 
 //update seller withdraw methods ---- only for seller
 router.put(
-  "update-payment-method",
+  "/update-payment-method",
   isSellerAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { widthrawMethod } = req.body;
+      const { withdrawMethod } = req.body;
+      console.log(withdrawMethod);
+
       const seller = await shopModel.findByIdAndUpdate(req.seller._id, {
-        widthrawMethod,
+        withdrawMethod,
       });
+
       res.status(201).json({
         success: true,
         seller,
@@ -325,6 +328,27 @@ router.put(
   })
 );
 
+// delete seller withdraw method --- only for seller
+router.delete(
+  "/delete-withdraw-method/:id",
+  isSellerAuthenticated,
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const seller = await shopModel.findById(req.seller._id);
+      if (!seller) {
+        return next(new ErrorHandler("Seller not found with this id", 400));
+      }
+      seller.withdrawMethod = null;
+      await seller.save();
+      res.status(201).json({
+        success: true,
+        seller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;
 
 // 56:55 minute start
